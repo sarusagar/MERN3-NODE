@@ -20,3 +20,9 @@ const blogSchema = new Schema({
 
 const Blog = mongoose.model('Blog',blogSchema)
 module.exports = Blog
+
+// to pushch the code
+// you just type 
+// git add .
+// git commit -m "add blogSchema"
+// git push
