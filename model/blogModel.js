@@ -3,15 +3,14 @@ const Schema =mongoose.Schema
 
 const blogSchema = new Schema({
     title:{
-        type: String,
-        unique : true
+        type: String
     },
 
     subtitle :{
         type:String
     },
     description:{
-        type:text
+        type:String
     },
     image:{
         type:String
