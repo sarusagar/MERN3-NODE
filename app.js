@@ -2,10 +2,14 @@ require('dotenv').config()
 const express =require('express')
 const connectToDatabase = require('./database')
 const Blog = require('./model/blogModel')
+
 const app = express()
 app.use(express.json())
+const {multer,storage} =require('./middleware/multerConfig')
+const uplaod = multer({storage:storage})
 
 connectToDatabase()
+
 
 app.get("/",(req,res)=>{
     // res.send("hello world from saga saru magar .")
@@ -21,13 +25,19 @@ app.get("/about",(req,res)=>{
     })
 })
 
-app.post("/blog",async(req,res)=>{
+app.post("/blog",uplaod.single('image'),async(req,res)=>{
     // const title = req.body.title
     // const subtitle = req.body.subtitle
     // const description = req.body.description
     // const image = req.body.image
 
     const {title,subtitle,description,image} = req.body
+    if(!title || !subtitle || !description || !image){
+        return res.status(400).json({
+            message :"Please provide title,subtitle,description & image."
+        })
+    }
+
     await Blog.create({
         title : title,
         subtitle : subtitle,
