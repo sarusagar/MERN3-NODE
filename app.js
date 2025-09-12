@@ -25,30 +25,44 @@ app.get("/about",(req,res)=>{
     })
 })
 
-app.post("/blog",uplaod.single('image'),async(req,res)=>{
+app.post("/blog",uplaod.single('image'), async(req,res)=>{
+    // console.log(req.body)
+    console.log(req.file)
     // const title = req.body.title
     // const subtitle = req.body.subtitle
     // const description = req.body.description
-    // const image = req.body.image
+    // const image = req.body.image or
 
-    const {title,subtitle,description,image} = req.body
-    if(!title || !subtitle || !description || !image){
+    const {title,subtitle,description} = req.body
+    const filename =req.file.filename
+
+    if(!title || !subtitle || !description){
         return res.status(400).json({
-            message :"Please provide title,subtitle,description & image."
+            message :"Please provide title,subtitle, & description."
         })
     }
 
-    await Blog.create({
+    await Blog.create({ 
         title : title,
         subtitle : subtitle,
         description : description,
-        image :image
+        image : filename
     })
 
     res.status(200).json({
         message:"Blog API hit Successfully."
     })
 })
+
+app.get("/blog", async(req,res)=>{
+    const blogs = await Blog.find()
+    res.status(200).json({
+        message:"Blogs fetched data successfully.", // return array
+        data:blogs
+    })
+})
+
+app.use(express.static('./storage'))
 
 
 app.listen(process.env.PORT,()=>{
