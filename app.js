@@ -7,6 +7,8 @@ const app = express()
 app.use(express.json())
 const {multer,storage} =require('./middleware/multerConfig')
 const uplaod = multer({storage:storage})
+const fs = require('fs')
+
 
 connectToDatabase()
 
@@ -61,6 +63,71 @@ app.get("/blog", async(req,res)=>{
         data:blogs
     })
 })
+
+app.get("/blog/:id",async(req,res)=>{
+        // console.log(req.params.id)
+        const id = req.params.id
+        const blog = await Blog.findById(id) //object 
+
+    if(!blog){
+            return res.status(404).json({
+                message:"Data not found."
+            })
+        }
+        res.status(200).json({
+            message:"Data found.",
+            data:blog
+        })
+})
+
+app.delete("/blog/:id", async(req,res)=>{
+    const id=req.params.id
+    const blog =  await Blog.findById(id)
+    const imageName = blog.image
+
+    fs.unlink(`storage/${imageName}`,(err)=>{
+        if(err){
+            console.log(err)
+        }else{
+            console.log("file deleted successfully.")
+        }
+    })
+    await Blog.findByIdAndDelete(id)
+    res.status(200).json({
+        message:"Blog deleted Successfully."
+    })
+})
+
+app.patch('/blog/:id',uplaod.single('image'), async(req,res)=>{
+    const id = req.params.id
+    const {title,subtitle,description} = req.body
+    let imageName;
+
+    if(req.file){
+        imageName=req.file.filename
+        const blog = await Blog.findById(id)
+        const oldimageName =blog.image
+
+        fs.unlink(`storage/${oldimageName}`,(err)=>{
+            if(err){
+                console.log(err)
+            }else{
+                console.log("File deleted successfully.")
+            }
+        })
+    }
+     await Blog.findByIdAndUpdate(id,{
+        title : title,
+        subtitle : subtitle,
+        description : description,
+        image : imageName
+    })
+    res.status(200).json({
+        message:"Blog updated successfully."
+    })
+
+})
+
 
 app.use(express.static('./storage'))
 
