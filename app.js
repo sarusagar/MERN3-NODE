@@ -12,7 +12,7 @@ const cors= require('cors')
 
 app.use(cors(
     {
-    origin:["http://localhost:4000","https://mern-3-node-front.vercel.app/"],
+    origin:["http://localhost:4000","https://mern-3-node-front.vercel.app"],
     optionsSuccessStatus: 200 
 
 }
@@ -41,7 +41,7 @@ app.post("/blog",uplaod.single('image'), async(req,res)=>{
     const {title,subtitle,description} = req.body
     let filename;
     if(req.file){
-    filename ="http://localhost:3000/" + req.file.filename
+    filename ="https://mern-3-node-front.vercel.app/" + req.file.filename
     }else{
         filename ="https://i.ndtvimg.com/i/2015-08/happy-smiley_650x400_61439186708.jpg"
     }
