@@ -8,6 +8,15 @@ app.use(express.json())
 const {multer,storage} =require('./middleware/multerConfig')
 const uplaod = multer({storage:storage})
 const fs = require('fs')
+const cors= require('cors')
+
+app.use(cors(
+    {
+    origin:"http://localhost:4000",
+    optionsSuccessStatus: 200 
+
+}
+))
 
 
 connectToDatabase()
@@ -28,15 +37,15 @@ app.get("/about",(req,res)=>{
 })
 
 app.post("/blog",uplaod.single('image'), async(req,res)=>{
-    // console.log(req.body)
     console.log(req.file)
-    // const title = req.body.title
-    // const subtitle = req.body.subtitle
-    // const description = req.body.description
-    // const image = req.body.image or
-
     const {title,subtitle,description} = req.body
-    const filename =req.file.filename
+    let filename;
+    if(req.file){
+    filename ="http://localhost:3000/" + req.file.filename
+    }else{
+        filename ="https://i.ndtvimg.com/i/2015-08/happy-smiley_650x400_61439186708.jpg"
+    }
+    
 
     if(!title || !subtitle || !description){
         return res.status(400).json({
@@ -104,7 +113,7 @@ app.patch('/blog/:id',uplaod.single('image'), async(req,res)=>{
     let imageName;
 
     if(req.file){
-        imageName=req.file.filename
+        imageName="http://localhost:3000/" +req.file.filename
         const blog = await Blog.findById(id)
         const oldimageName =blog.image
 
