@@ -40,7 +40,7 @@ app.post("/blog",uplaod.single('image'), async(req,res)=>{
     const {title,subtitle,description} = req.body
     let filename;
     if(req.file){
-    filename ="https://mern-3-node-front.vercel.app/" + req.file.filename
+    filename ="https://mern3-node-vynn.onrender.com/" + req.file.filename
     }else{
         filename ="https://i.ndtvimg.com/i/2015-08/happy-smiley_650x400_61439186708.jpg"
     }
@@ -112,7 +112,7 @@ app.patch('/blog/:id',uplaod.single('image'), async(req,res)=>{
     let imageName;
 
     if(req.file){
-        imageName="https://mern-3-node-front.vercel.app/" +req.file.filename
+        imageName="https://mern3-node-vynn.onrender.com/" +req.file.filename
         const blog = await Blog.findById(id)
         const oldimageName =blog.image
 
