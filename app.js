@@ -113,7 +113,7 @@ app.patch('/blog/:id',uplaod.single('image'), async(req,res)=>{
     let imageName;
 
     if(req.file){
-        imageName="http://localhost:3000/" +req.file.filename
+        imageName="https://mern-3-node-front.vercel.app/" +req.file.filename
         const blog = await Blog.findById(id)
         const oldimageName =blog.image
 
