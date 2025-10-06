@@ -12,7 +12,7 @@ const cors= require('cors')
 
 app.use(cors(
     {
-    origin:"http://localhost:4000",
+    origin:["http://localhost:4000","https://mern-3-node-front.vercel.app/"],
     optionsSuccessStatus: 200 
 
 }
